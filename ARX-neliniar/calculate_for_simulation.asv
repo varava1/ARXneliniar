@@ -1,0 +1,56 @@
+function [y_tilda,e,MSE] = calculate_for_simulation(N, m, na, nb, theta, u, y)
+y_tilda=zeros(N,1);
+
+for k=1:N
+    phi_row=create_phi_row(N,m,na,nb,y_tilda,u,k);
+    y_tilda(k)=phi_row*theta;
+end
+
+e=y_tilda-y(1:length(y_tilda));
+MSE=mean(e.^2);
+end
+
+
+function [y_tilda,e,MSE] = calculate_for_simulation(N, m, na, nb, theta, u, y)
+y_tilda=zeros(N,1);
+variables=zeros(1,na+nb);
+
+for k=1:N
+    y_tilda_row=zeros(1,na+nb);
+    position=1;
+
+    for i=1:na
+        if k-i>0
+            y_tilda_row(position)=theta(i)*y_tilda(k-i);
+            variables(i)=y_tilda(k-i);
+            position=position+1;
+        end  
+    end
+
+    for i=1:nb
+        if k-i>0
+            y_tilda_row(position)=theta(na+i)*u_val(k-i);
+            variables(i)=u(k-nk-i);
+            position=position+1;
+        end
+    end
+
+    y_tilda(k)=sum(y_tilda_row);
+end
+
+
+        for i=na+1:na+nb
+            if k-nk-i>0
+                 variables(i)=u(k-nk-i);
+            else
+                variables(i)=0;
+            end
+        end
+        
+        current_powers=[];
+    
+        phi_row=generate_monomials(variables, m, current_powers);
+e=y_tilda-y(1:length(y_tilda));
+MSE=mean(e.^2);
+end
+
